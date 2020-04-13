@@ -1,5 +1,8 @@
 package ouc.isclab.microservice.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import ouc.isclab.microservice.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,21 +15,31 @@ import java.util.List;
 /**
  * 服务消费者控制器
  */
+@Slf4j
 @RestController
 public class ShoppingController {
 
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
+
     @GetMapping("/user/{id}")
     public User findUserById(@PathVariable Long id) {
         // 硬编码URL，通过RestTemplate请求微服务，返回数据自动封装为User
-        return restTemplate.getForObject("http://localhost:8000/user/" + id, User.class);
+        return restTemplate.getForObject("http://microservice-provider-user/" + id, User.class);
     }
 
     @GetMapping("/users")
     public List<User> findUsers() {
         // 硬编码URL，通过RestTemplate请求微服务，返回数据自动封装为List
-        return restTemplate.getForObject("http://localhost:8000/users", List.class);
+        return restTemplate.getForObject("http://microservice-provider-user/users", List.class);
+    }
+
+    @GetMapping("/user-service-instance-log")
+    public void logUserServiceInstance() {
+        ServiceInstance serviceInstance = loadBalancerClient.choose("microservice-provider-user");
+        log.info("{} : {} : {}", serviceInstance.getServiceId(), serviceInstance.getHost(), serviceInstance.getPort());
     }
 }
