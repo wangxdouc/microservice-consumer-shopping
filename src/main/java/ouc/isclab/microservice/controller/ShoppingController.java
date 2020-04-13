@@ -27,13 +27,13 @@ public class ShoppingController {
 
     @GetMapping("/user/{id}")
     public User findUserById(@PathVariable Long id) {
-        // 硬编码URL，通过RestTemplate请求微服务，返回数据自动封装为User
+        // Ribbon负载均衡支持，通过RestTemplate请求微服务，返回数据自动封装为User
         return restTemplate.getForObject("http://microservice-provider-user/" + id, User.class);
     }
 
     @GetMapping("/users")
     public List<User> findUsers() {
-        // 硬编码URL，通过RestTemplate请求微服务，返回数据自动封装为List
+        // Ribbon负载均衡支持，通过RestTemplate请求微服务，返回数据自动封装为List
         return restTemplate.getForObject("http://microservice-provider-user/users", List.class);
     }
 
