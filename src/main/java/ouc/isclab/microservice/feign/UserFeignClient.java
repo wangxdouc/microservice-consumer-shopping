@@ -12,5 +12,5 @@ import ouc.isclab.microservice.entity.User;
 @FeignClient(name = "microservice-provider-user")
 public interface UserFeignClient {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    User findById(@PathVariable("id") Long id);
+    User findUserById(@PathVariable("id") Long id);
 }

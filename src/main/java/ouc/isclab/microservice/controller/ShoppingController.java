@@ -32,7 +32,6 @@ public class ShoppingController {
     @Autowired
     private UserFeignClient userFeignClient;
 
-
     @GetMapping("/user/{id}")
     public User findUserById(@PathVariable Long id) {
         // Ribbon负载均衡支持，通过RestTemplate请求微服务，返回数据自动封装为User
